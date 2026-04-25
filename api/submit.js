@@ -25,7 +25,6 @@ export default async function handler(req, res) {
       });
       const d = await r.json();
       if (!d?.file?.id) return null;
-      // Poll up to 12 seconds
       for (let i = 0; i < 12; i++) {
         await new Promise(r => setTimeout(r, 1000));
         const check = await fetch(`https://www.wixapis.com/site-media/v1/files/${d.file.id}`, { headers });
@@ -40,7 +39,7 @@ export default async function handler(req, res) {
     const incoming = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
     const { draftPost, inlineImageUrls } = incoming;
 
-    // Import all inline images into Wix
+    // Import all inline images into Wix and map original -> wix url
     const wixUrls = {};
     if (inlineImageUrls?.length) {
       for (const url of inlineImageUrls) {
@@ -49,29 +48,15 @@ export default async function handler(req, res) {
       }
     }
 
-    // Build rich content nodes with IMAGE nodes for each image
-    const nodes = [];
-    const paragraphs = (draftPost.richContent?.nodes || []);
-    
-    // If there are inline images, build proper IMAGE nodes
-    if (Object.keys(wixUrls).length > 0) {
-      // Add text paragraphs
-      if (paragraphs.length > 0) {
-        nodes.push(...paragraphs);
+    // Build nodes — paragraphs first, then images
+    const textNodes = draftPost.richContent?.nodes || [];
+    const imageNodes = Object.values(wixUrls).map(wixUrl => ({
+      type: "IMAGE",
+      imageData: {
+        image: { src: { url: wixUrl } },
+        containerData: { width: { size: "CONTENT" }, alignment: "CENTER" }
       }
-      // Add image nodes for each imported image
-      for (const [original, wixUrl] of Object.entries(wixUrls)) {
-        nodes.push({
-          type: "IMAGE",
-          imageData: {
-            image: { src: { url: wixUrl } },
-            containerData: { width: { size: "CONTENT" }, alignment: "CENTER" }
-          }
-        });
-      }
-    } else {
-      nodes.push(...paragraphs);
-    }
+    }));
 
     const payload = {
       draftPost: {
@@ -80,7 +65,7 @@ export default async function handler(req, res) {
         excerpt: draftPost.excerpt,
         categoryIds: draftPost.categoryIds,
         tagIds: draftPost.tagIds,
-        richContent: { nodes: nodes.length > 0 ? nodes : paragraphs },
+        richContent: { nodes: [...textNodes, ...imageNodes] },
       }
     };
 
