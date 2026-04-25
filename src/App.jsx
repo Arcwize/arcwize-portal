@@ -670,7 +670,7 @@ function Editor({ user, draft, categories, tags, onSave, onSubmit, onBack, notif
     try {
       const saved = await saveToSupabase("submitted");
 
-      const bodyHTML = saved.body || "";
+      const bodyHTML = saved.body || bodyRef.current?.innerHTML || "";
 const imgMatches = [...bodyHTML.matchAll(/src="(https:\/\/[^"]+)"/g)];
 const inlineImageUrls = imgMatches.map(m => m[1]);
 
