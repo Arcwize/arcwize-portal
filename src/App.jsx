@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 // ── CONFIG ────────────────────────────────────────────────────────────────────
-const SUPABASE_URL = "https://zteaayytpxjptljzlctw.supabase.co";
-const SUPABASE_KEY = "sb_publishable_6qsBb5WzLOtRINIndFSu2g_KeKZOKjA";
+const SUPABASE_URL = "sb_publishable_wOYMShmjRqJO7GjJnUbqQw_k_dY_rtD";
+const SUPABASE_KEY = "sb_publishable_wOYMShmjRqJO7GjJnUbqQw_k_dY_rtD";
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const ADMIN_EMAIL = "contact.arcwize@gmail.com";
