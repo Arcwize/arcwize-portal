@@ -96,10 +96,20 @@ export default async function handler(req, res) {
 
     // Attach cover image
     if (wixCoverUrl) {
-      payload.draftPost.coverMedia = {
-        image: { src: { url: wixCoverUrl } }
-      };
-    }
+  payload.draftPost.media = {
+    wixMedia: {
+      image: {
+        imageInfo: {
+          url: wixCoverUrl,
+          width: 1200,
+          height: 630,
+        }
+      }
+    },
+    displayed: true,
+    custom: false,
+  };
+}
 
     const createRes = await fetch("https://www.wixapis.com/blog/v3/draft-posts", {
       method: "POST",
