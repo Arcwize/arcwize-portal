@@ -670,9 +670,9 @@ function Editor({ user, draft, categories, tags, onSave, onSubmit, onBack, notif
     try {
       const saved = await saveToSupabase("submitted");
 
-      const bodyHTML = bodyRef.current?.innerHTML || saved.body || "";
-      const imgMatches = [...bodyHTML.matchAll(/src="(https:\/\/[^"]+)"/g)];
-      const inlineImageUrls = imgMatches.map(m => m[1]);
+      const bodyHTML = saved.body || "";
+const imgMatches = [...bodyHTML.matchAll(/src="(https:\/\/[^"]+)"/g)];
+const inlineImageUrls = imgMatches.map(m => m[1]);
 
       const plainParagraphs = (bodyRef.current?.innerText || bodyText).trim().split(/\n\n+/).filter(Boolean);
       const nodes = plainParagraphs.map(p => ({
