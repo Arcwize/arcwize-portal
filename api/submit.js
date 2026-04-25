@@ -18,14 +18,15 @@ export default async function handler(req, res) {
 
   const importImageToWix = async (imageUrl) => {
     try {
-      const importRes = await fetch("https://www.wixapis.com/site-media/v1/files/import", {
+      const importRes = await fetch("https://www.wixapis.com/media/v1/files/import", {
         method: "POST",
         headers,
         body: JSON.stringify({
-          url: imageUrl,
-          mediaType: "IMAGE",
-          displayName: "article-image.jpg",
-        }),
+  url: imageUrl,
+  mimeType: "image/jpeg",
+  displayName: "article-image.jpg",
+  parentFolderId: "media-root",
+}),
       });
       const importData = await importRes.json();
       const fileId = importData?.file?.id;
