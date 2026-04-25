@@ -16,8 +16,12 @@ export default async function handler(req, res) {
     // Inject memberId into the draftPost
     const payload = {
   draftPost: {
-    ...incoming.draftPost,
     memberId: WIX_MEMBER_ID,
+    title: incoming.draftPost.title,
+    excerpt: incoming.draftPost.excerpt,
+    categoryIds: incoming.draftPost.categoryIds,
+    tagIds: incoming.draftPost.tagIds,
+    richContent: incoming.draftPost.richContent,
     status: "IN_REVIEW",
   }
 };
