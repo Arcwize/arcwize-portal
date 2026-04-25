@@ -96,18 +96,12 @@ export default async function handler(req, res) {
 
     // Attach cover image
     if (wixCoverUrl) {
-  payload.draftPost.media = {
-    wixMedia: {
-      image: {
-        imageInfo: {
-          url: wixCoverUrl,
-          width: 1200,
-          height: 630,
-        }
+  payload.draftPost.heroImage = {
+    image: {
+      src: {
+        url: wixCoverUrl
       }
-    },
-    displayed: true,
-    custom: false,
+    }
   };
 }
 
